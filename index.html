@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>TeaTime Mogilev — Bubble Tea</title>
+  <script src="https://telegram.org"></script>
+  <style>
+    :root {
+      --bg: #0b0d10;
+      --card: #14181f;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --neon: #a8f05a;
+      --neon-glow: rgba(168, 240, 90, 0.35);
+      --purple: #7c5cff;
+      --text: #ffffff;
+      --muted: #8b94a5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding: 14px 14px 96px;
+      min-height: 100vh;
+    }
+
+    /* Шапка пользователя */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon), #4cd137);
+      color: #0b0d10;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .user-name {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .user-lvl {
+      font-size: 11px;
+      color: var(--neon);
+    }
+
+    .balance-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #1d232d;
+      padding: 6px 12px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    /* Узкая плашка-акция */
+    .promo-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(90deg, #1b2416, #14181f);
+      border: 1px solid rgba(168, 240, 90, 0.3);
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+
+    .promo-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--neon);
+      text-transform: uppercase;
+    }
+
+    .promo-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Главный баннер */
+    .hero-card {
+      position: relative;
+      background: radial-gradient(circle at 85% 30%, rgba(168, 240, 90, 0.25), transparent 60%),
+                  linear-gradient(145deg, #171d26, #101318);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 20px 18px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .hero-tag {
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--neon);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .hero-title {
+      font-size: 24px;
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 8px;
+      max-width: 75%;
+    }
+
+    .hero-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      max-width: 72%;
+      line-height: 1.4;
+    }
+
+    .hero-emoji {
+      position: absolute;
+      right: 12px;
+      top: 22px;
+      font-size: 68px;
+      filter: drop-shadow(0 0 18px var(--neon-glow));
+    }
+
+    .btn-neon {
+      width: 100%;
+      background: linear-gradient(90deg, var(--neon), #8be038);
+      color: #0b0d10;
+      border: none;
+      border-radius: 14px;
+      padding: 13px;
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 20px var(--neon-glow);
+      cursor: pointer;
+    }
+
+    /* Сетка плиток 2x2 */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .tile {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 145px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tile-title {
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .tile-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #232934;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .progress-fill {
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--neon), #4cd137);
+      border-radius: 6px;
+    }
+
+    .btn-dark {
+      width: 100%;
+      background: #212733;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 9px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Вкладки контента */
+    .tab-section {
+      display: none;
+    }
+    .tab-section.active {
+      display: block;
+    }
+
+    /* Карточки напитков */
+    .drink-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .drink-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .drink-name {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .drink-comp {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .drink-price {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--neon);
+      white-space: nowrap;
+    }
+
+    .vol-switch {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .vol-btn {
+      flex: 1;
+      padding: 7px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: #1b2029;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .vol-btn.active {
+      background: rgba(168, 240, 90, 0.15);
+      border-color: var(--neon);
+      color: var(--neon);
+    }
+
+    /* Плавающее нижнее меню */
+    .bottom-nav {
+      position: fixed;
+      bottom: 14px;
+      left: 14px;
+      right: 14px;
+      background: rgba(20, 24, 31, 0.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 6px;
+      z-index: 100;
+    }
+
+    .nav-item {
+      background: none;
+      border: none;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .nav-item.active {
+      color: var(--neon);
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -4px;
+      right: -6px;
+      background: var(--neon);
+      color: #0b0d10;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 1px 5px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Верхняя панель профиля -->
+  <div class="top-bar">
+    <div class="user-info">
+      <div class="avatar" id="userAvatar">T</div>
+      <div>
+        <div class="user-name" id="userName">Гость TeaTime</div>
+        <div class="user-lvl">Чайный гурман • Ур. 1</div>
+      </div>
+    </div>
+    <div class="balance-pill">
+      <span>🧋 3 / 6</span>
+    </div>
+  </div>
+
+  <!-- ВКЛАДКА 1: ГЛАВНАЯ -->
+  <div id="tab-home" class="tab-section active">
+    <div class="promo-strip" onclick="switchTab('menu')">
+      <div>
+        <div class="promo-title">🎁 Бесплатный топинг</div>
+        <div class="promo-sub">К первому заказу в приложении</div>
+      </div>
+      <div style="color: var(--neon); font-weight: 900;">→</div>
+    </div>
+
+    <div class="hero-card">
+      <div class="hero-tag">TEA TIME • МОГИЛЕВ</div>
+      <div class="hero-title">СВЕЖИЙ БАБЛ-ТИ БЕЗ ОЧЕРЕДИ</div>
+      <div class="hero-desc">Китайский листовой чай и нежное белорусское молоко. Собери свой стаканчик!</div>
+      <div class="hero-emoji">🧋</div>
+      <button class="btn-neon" onclick="switchTab('menu')">Открыть меню</button>
+    </div>
+
+    <div class="grid-2">
+      <div class="tile">
+        <div>
+          <div class="tile-title">Меню</div>
+          <div class="tile-sub">На кокосовой воде, матча и классика</div>
+        </div>
+        <button class="btn-dark" onclick="switchTab('menu')">В каталог</button>
+      </div>
+
+      <div class="tile">
+        <div>
+          <div class="tile-title">Штамп-карта</div>
+          <div class="tile-sub">Накоплено 3 из 6 стаканов</div>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+        </div>
+        <button class="btn-dark" onclick="alert('Купите еще 3 напитка и получите 6-й стаканчик 500 мл бесплатно!')">Подробнее</button>
+      </div>
+
+      <div class="tile">
+        <div>
+          <div class="tile-title">Бонусы</div>
+          <div class="tile-sub">Пригласи друга и получи +5 BYN</div>
+        </div>
+        <button class="btn-dark" onclick="shareBot()">Пригласить</button>
+      </div>
+
+      <div class="tile">
+        <div>
+          <div class="tile-title">Могилев</div>
+          <div class="tile-sub">Ежедневно с 10:00 до 22:00</div>
+        </div>
+        <button class="btn-dark" onclick="switchTab('info')">Где мы</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ВКЛАДКА 2: МЕНЮ -->
+  <div id="tab-menu" class="tab-section">
+    <h2 style="margin-bottom: 12px; font-size: 20px;">Меню напитков 🧋</h2>
+    <div id="menuList"></div>
+  </div>
+
+  <!-- ВКЛАДКА 3: КОРЗИНА -->
