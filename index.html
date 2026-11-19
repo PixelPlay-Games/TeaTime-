@@ -191,7 +191,7 @@
 
     function setOrderMeta(type, val) { if (type === 'time') orderTime = val; if (type === 'pay') orderPay = val; updateCartUI(); }
     function removeFromCart(idx) { cart.splice(idx, 1); updateCartUI(); }
-        async function submitOrder(total) {
+            async function submitOrder(total) {
       initTg();
       const btn = document.getElementById('submitOrderBtn');
       const comment = document.getElementById('orderComment').value.trim();
@@ -202,11 +202,12 @@
       const itemsText = cart.map((i, idx) => `${idx + 1}. ${i.name} (${i.vol} мл, ${i.temp}${i.sugar ? ', сахар: ' + i.sugar : ''}) — ${i.price} BYN`).join('\n');
       const message = `НОВЫЙ ПРЕДЗАКАЗ — TeaTime Могилев\n\n• Гость: ${tgUser.first_name} (${userTag})\n• Время: ${orderTime}\n• Оплата: ${orderPay}\n` + (comment ? `• Комментарий: ${comment}\n` : '') + `\nСостав заказа:\n${itemsText}\n\nИтого: ${total} BYN`;
 
-      const url = atob('aHR0cHM6Ly9hcGkudGVsZWdyYW0ub3JnL2JvdA==') + BOT_TOKEN.trim() + '/sendMessage?chat_id=' + ADMIN_CHAT_ID + '&text=' + encodeURIComponent(message);
-
-
       try {
-        const res = await fetch(url);
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: message })
+        });
         const data = await res.json();
 
         if (data.ok) {
@@ -216,21 +217,14 @@
           updateCartUI();
           switchTab('home');
         } else {
-          alert('Ошибка Telegram: ' + data.description);
+          alert('Ошибка отправки: ' + (data.description || 'Неизвестная ошибка'));
           btn.disabled = false;
           btn.innerText = 'Оформить предзаказ';
         }
       } catch (err) {
-        // Обход блокировки iOS Safari (Load failed)
-        const img = new Image();
-        img.src = url;
-        setTimeout(() => {
-          if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-          alert(`Заказ на сумму ${total} BYN отправлен!\n\nЖдём вас по адресу: ул. Ленинская 45, пом. 3/1 (${orderTime.toLowerCase()}).`);
-          cart = [];
-          updateCartUI();
-          switchTab('home');
-        }, 700);
+        alert('Ошибка соединения: ' + err.message);
+        btn.disabled = false;
+        btn.innerText = 'Оформить предзаказ';
       }
     }
 
