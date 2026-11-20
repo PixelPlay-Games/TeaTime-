@@ -33,33 +33,26 @@
     .cat-btn { background: var(--card); border: 1px solid var(--card-border); color: var(--muted); padding: 9px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; white-space: nowrap; cursor: pointer; }
     .cat-btn.active { background: linear-gradient(90deg, var(--accent-bright), var(--neon)); color: #0e1c14; border-color: transparent; font-weight: 800; }
     .block-heading { font-size: 16px; font-weight: 800; color: var(--accent-bright); margin: 16px 0 10px; text-transform: uppercase; }
-    .drink-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 22px; padding: 14px; margin-bottom: 14px; }
-    .drink-header { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
-    .drink-img-box { width: 92px; height: 118px; border-radius: 16px; background: rgba(168, 240, 90, 0.35); border: 1px solid rgba(168, 240, 90, 0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
-    .drink-img-box img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
-    .drink-info { flex: 1; }
-    .drink-name { font-size: 16px; font-weight: 800; color: #ffffff; line-height: 1.2; }
-    .drink-comp { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.35; }
-    .drink-price { font-size: 16px; font-weight: 900; color: var(--accent-bright); margin-top: 6px; }
-    .opt-label { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; }
-    .opt-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
-    .opt-btn { flex: 1; min-width: fit-content; padding: 7px 10px; border-radius: 10px; border: 1px solid var(--card-border); background: #112218; color: var(--muted); font-size: 11px; font-weight: 700; cursor: pointer; text-align: center; }
-    .opt-btn.active { background: rgba(123, 237, 159, 0.22); border-color: var(--neon); color: #ffffff; }
-    .opt-btn.fixed { background: rgba(168, 240, 90, 0.12); border-color: rgba(168, 240, 90, 0.35); color: var(--accent-bright); }
-    .form-input { width: 100%; background: #112218; border: 1px solid var(--card-border); border-radius: 12px; padding: 11px 12px; color: #ffffff; font-size: 13px; margin-bottom: 10px; outline: none; }
-    .bottom-nav { position: fixed; bottom: 14px; left: 14px; right: 14px; background: rgba(23, 43, 32, 0.95); border: 1px solid rgba(168, 240, 90, 0.25); border-radius: 22px; display: flex; justify-content: space-around; padding: 10px 6px; z-index: 100; }
-    .nav-item { background: none; border: none; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; cursor: pointer; position: relative; }
-    .nav-item.active { color: var(--accent-bright); }
-    .cart-badge { position: absolute; top: -4px; right: -6px; background: var(--accent-bright); color: #0e1c14; font-size: 10px; font-weight: 900; padding: 1px 5px; border-radius: 10px; }
-              .drink-card { overflow: hidden; border-radius: 20px; padding: 0; }
-    .drink-header { flex-direction: column; align-items: stretch; gap: 0; }
-    .drink-img-box { position: relative; width: 100%; height: 250px; padding: 0; overflow: hidden; }
-    .drink-img-box::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 65px; background: linear-gradient(to bottom, transparent, #142c22); pointer-events: none; }
-    .drink-img-box img { width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 0; display: block; }
-    .drink-name { font-size: 18px; font-weight: 700; }
-    .drink-comp { font-size: 13px; margin-top: 4px; }
-    .drink-price { font-size: 18px; margin-top: 6px; }
-    .drink-card .opt-label, .drink-card .opt-row, .drink-card .add-btn { margin-left: 16px; margin-right: 16px; }
+       .drink-card { width: 100%; box-sizing: border-box; background: rgba(20, 44, 34, 0.85); border: 1px solid rgba(123, 219, 148, 0.18); border-radius: 22px; overflow: hidden; margin-bottom: 18px; padding: 0; }
+    .drink-header { display: flex; flex-direction: column; align-items: stretch; gap: 0; margin: 0; }
+    .drink-img-box { position: relative; width: 100%; height: 245px; margin: 0; padding: 0; overflow: hidden; background: #142c22; }
+    .drink-img-box::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 70px; background: linear-gradient(to bottom, rgba(20, 44, 34, 0), #142c22); pointer-events: none; }
+    .drink-img-box img { width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 0; margin: 0; padding: 0; display: block; }
+    .drink-info { padding: 12px 16px 4px; }
+    .drink-name { font-size: 18px; font-weight: 700; color: #ffffff; }
+    .drink-comp { font-size: 13px; color: rgba(255, 255, 255, 0.72); margin-top: 4px; line-height: 1.4; }
+    .drink-price { font-size: 18px; font-weight: 700; color: #7bdb94; margin-top: 8px; }
+    .opt-label { font-size: 11px; color: rgba(255, 255, 255, 0.55); text-transform: uppercase; letter-spacing: 0.5px; margin: 12px 16px 6px; }
+    .opt-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 16px; }
+    .opt-btn { flex: 1; min-width: fit-content; padding: 9px 12px; border-radius: 12px; border: 1px solid rgba(123, 219, 148, 0.25); background: rgba(255, 255, 255, 0.04); color: #ffffff; font-size: 13px; font-weight: 500; text-align: center; cursor: pointer; }
+    .opt-btn.active { background: rgba(123, 219, 148, 0.22); border-color: #7bdb94; color: #ffffff; font-weight: 600; }
+    .opt-btn.fixed { background: rgba(168, 240, 184, 0.14); border-color: rgba(168, 240, 184, 0.35); color: #a8f0b8; }
+    .add-btn { width: calc(100% - 32px); margin: 16px; padding: 13px; border: none; border-radius: 14px; background: linear-gradient(135deg, #7bdb94, #52b788); color: #0b1c14; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .form-input { width: 100%; box-sizing: border-box; background: #142c22; border: 1px solid rgba(123, 219, 148, 0.25); border-radius: 12px; padding: 12px; color: #fff; font-size: 14px; margin-bottom: 12px; }
+    .bottom-nav { position: fixed; bottom: 14px; left: 16px; right: 16px; background: rgba(13, 31, 24, 0.94); backdrop-filter: blur(16px); border: 1px solid rgba(123, 219, 148, 0.2); border-radius: 22px; display: flex; justify-content: space-around; padding: 10px 6px; z-index: 100; }
+    .nav-item { background: none; border: none; color: rgba(255, 255, 255, 0.55); font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 4px; position: relative; cursor: pointer; }
+    .nav-item.active { color: #7bdb94; font-weight: 600; }
+    .cart-badge { position: absolute; top: -4px; right: -8px; background: #7bdb94; color: #0b1c14; font-size: 10px; font-weight: 700; min-width: 16px; height: 16px; border-radius: 8px; display: none; align-items: center; justify-content: center; padding: 0 4px; }
     .drink-card .add-btn { width: calc(100% - 32px); margin-bottom: 16px; }
   </style>
 </head>
