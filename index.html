@@ -288,6 +288,65 @@
     }
     updateShopStatus();
     setInterval(updateShopStatus, 60000);
+        let isSpinning = false;
+    function spinTeaRoulette() {
+      if (isSpinning || typeof drinks === 'undefined' || !drinks.length) return;
+      isSpinning = true;
+      const btn = document.getElementById('spinBtn');
+      const box = document.getElementById('rouletteBox');
+      const action = document.getElementById('rouletteAction');
+      const img = document.getElementById('rouletteImg');
+      const blk = document.getElementById('rouletteBlock');
+      const name = document.getElementById('rouletteName');
+      const desc = document.getElementById('rouletteDesc');
+      const addBtn = document.getElementById('rouletteAddBtn');
+
+      btn.disabled = true;
+      btn.innerText = 'Крутим...';
+      box.style.display = 'block';
+      action.style.display = 'none';
+
+      let ticks = 0;
+      const maxTicks = 18;
+      let chosen = drinks[0];
+
+      const timer = setInterval(() => {
+        chosen = drinks[Math.floor(Math.random() * drinks.length)];
+        img.src = chosen.img;
+        blk.innerText = chosen.block;
+        name.innerText = chosen.name;
+        desc.innerText = chosen.desc;
+        if (window.Telegram && Telegram.WebApp && Telegram.WebApp.HapticFeedback) {
+          Telegram.WebApp.HapticFeedback.selectionChanged();
+        }
+        ticks++;
+        if (ticks >= maxTicks) {
+          clearInterval(timer);
+          isSpinning = false;
+          btn.disabled = false;
+          btn.innerText = 'Крутить';
+          if (window.Telegram && Telegram.WebApp && Telegram.WebApp.HapticFeedback) {
+            Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+          }
+          const defaultTemp = (chosen.temps && chosen.temps[0]) ? chosen.temps[0] : 'Горячий';
+          const defaultSugar = chosen.hasSugar ? 'Стандартный сахар' : 'Без сахара';
+          addBtn.innerText = 'В корзину • ' + chosen.p500 + ' BYN (500 мл)';
+          addBtn.onclick = () => {
+            cart.push({
+              name: chosen.name,
+              size: '500 мл',
+              temp: defaultTemp,
+              sugar: defaultSugar,
+              price: chosen.p500
+            });
+            updateCartUI();
+            addBtn.innerText = 'Добавлено в заказ ✓';
+            setTimeout(() => { addBtn.innerText = 'В корзину • ' + chosen.p500 + ' BYN (500 мл)'; }, 1200);
+          };
+          action.style.display = 'flex';
+        }
+      }, 95);
+    }
   </script>
 </body>
 </html>
