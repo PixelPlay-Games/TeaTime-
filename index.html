@@ -250,13 +250,14 @@
 
     function switchTab(tabName) { document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); document.getElementById('tab-' + tabName).classList.add('active'); document.getElementById('nav-' + tabName).classList.add('active'); window.scrollTo(0, 0); }
 
-    function shareBot() {
-      const inviteText = 'Зацени свежий китайский чай в Могилеве на Ленинской 45! https://t.me';
-      if (navigator.share) {
-        navigator.share({ title: 'TeaTime Могилев', text: 'Зацени свежий китайский чай в Могилеве на Ленинской 45!', url: 'https://t.me' }).catch(() => {});
-      } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(inviteText);
-        alert('Ссылка-приглашение скопирована! Просто вставьте её в чат другу.');
+        function shareBot() {
+      const botUrl = 'https://t.me/TeaTime_Mogilev_bot';
+      const inviteText = 'Загляни в китайскую чайную лавку TeaTime в Могилёве (Ленинская, 45) 🍵 Тут можно крутануть чайную рулетку и заказать авторский чай без очереди!';
+                  const shareUrl = 'https://t.me' + '/share/url?url=' + encodeURIComponent(botUrl) + '&text=' + encodeURIComponent(inviteText);
+      if (window.Telegram && Telegram.WebApp && Telegram.WebApp.openTelegramLink) {
+        Telegram.WebApp.openTelegramLink(shareUrl);
+      } else {
+        window.open(shareUrl, '_blank');
       }
     }
 
